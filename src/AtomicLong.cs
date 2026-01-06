@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Runtime.CompilerServices;
 using System.Threading;
 
@@ -12,6 +13,7 @@ namespace Soenneker.Atomics.Longs;
 /// <see langword="struct"/>, avoid copying it (e.g., returning it from properties or storing it in collections
 /// where it may be copied by value).
 /// </summary>
+[DebuggerDisplay("{Value}")]
 public struct AtomicLong
 {
     private long _value;
