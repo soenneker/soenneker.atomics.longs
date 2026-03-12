@@ -15,7 +15,7 @@
     </ItemGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\..\src\Soenneker.Atomics.Longs.csproj" />
+        <ProjectReference Include="..\..\src\Soenneker.Atomics.Longs\Soenneker.Atomics.Longs.csproj" />
     </ItemGroup>
 
     <ItemGroup>
