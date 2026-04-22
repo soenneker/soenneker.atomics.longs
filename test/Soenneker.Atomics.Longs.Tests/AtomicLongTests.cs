@@ -1,10 +1,9 @@
-﻿using Xunit;
 
 namespace Soenneker.Atomics.Longs.Tests;
 
 public sealed class AtomicLongTests 
 {
-    [Fact]
+    [Test]
     public void Default()
     {
 
