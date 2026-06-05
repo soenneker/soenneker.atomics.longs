@@ -18,9 +18,6 @@ public struct AtomicLong
 {
     private long _value;
 
-    /// <summary>
-    /// Initializes a new <see cref="AtomicLong"/> with an optional initial value.
-    /// </summary>
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public AtomicLong(long initialValue = 0) => _value = initialValue;
 
