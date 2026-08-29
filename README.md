@@ -13,6 +13,29 @@ A lightweight, allocation-free atomic `long` backed by `Volatile` and `Interlock
 dotnet add package Soenneker.Atomics.Longs
 ```
 
+## Usage
+
+```csharp
+using Soenneker.Atomics.Longs;
+
+var bytesProcessed = new AtomicLong();
+
+bytesProcessed.Add(buffer.Length);
+long snapshot = bytesProcessed.Read();
+```
+
+Use `SetIfGreater` to retain a high-water mark under concurrency:
+
+```csharp
+peakQueueDepth.SetIfGreater(currentQueueDepth);
+```
+
+`TrySetIfGreater` and `TrySetIfLess` perform one compare-and-exchange attempt; the retrying `SetIfGreater` and `SetIfLess` variants are preferable when the maximum or minimum must eventually reflect the supplied candidate.
+
+`Update` and `Accumulate` run a compare-and-exchange loop and may call their delegate multiple times. The delegate must not perform logging, I/O, mutation, or other side effects.
+
+All members operate atomically on this counter, but several separate calls are not one transaction. Use a lock when multiple values or multi-step invariants must change together.
+
 ## What you get
 
 - `AtomicLong` — A lightweight, allocation-free atomic `long` backed by `Volatile` and `Interlocked` operations. Intended for use as a private field / inline synchronization primitive. Because this is a mutable `struct`, avoid copying it (e.g., returning it from properties or storing it in collections where it may be copied by value).
