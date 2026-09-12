@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Diagnostics;
 using System.Runtime.CompilerServices;
 using System.Threading;
@@ -290,6 +290,29 @@ public struct AtomicLong
             long original = Volatile.Read(ref _value);
             long next = accumulator(original, x);
 
+            long prior = Interlocked.CompareExchange(ref _value, next, original);
+            if (prior == original)
+                return next;
+
+            spin.SpinOnce();
+        }
+    }
+
+    /// <summary>
+    /// Atomically transforms the value using caller-supplied state, allowing a static callback without a closure allocation.
+    /// </summary>
+    /// <typeparam name="TState">The type of state supplied to the callback.</typeparam>
+    /// <param name="state">State passed to each invocation.</param>
+    /// <param name="update">A callback that may run multiple times when another writer wins a race.</param>
+    /// <returns>The successfully published value.</returns>
+    public long Update<TState>(TState state, Func<long, TState, long> update)
+    {
+        ArgumentNullException.ThrowIfNull(update);
+        var spin = new SpinWait();
+        while (true)
+        {
+            long original = Volatile.Read(ref _value);
+            long next = update(original, state);
             long prior = Interlocked.CompareExchange(ref _value, next, original);
             if (prior == original)
                 return next;
