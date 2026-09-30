@@ -7,7 +7,7 @@ namespace Soenneker.Atomics.Longs.Tests;
 public sealed class NumericRegressionTests
 {
     [Test]
-    public async Task Updates_and_accumulations_preserve_concurrent_writes()
+    public async ValueTask Updates_and_accumulations_preserve_concurrent_writes()
     {
         var holder = new Holder();
         Parallel.For(0, 8, _ =>
@@ -23,7 +23,7 @@ public sealed class NumericRegressionTests
     }
 
     [Test]
-    public async Task A_failed_exchange_retries_with_the_observed_value()
+    public async ValueTask A_failed_exchange_retries_with_the_observed_value()
     {
         var holder = new Holder();
         int calls = 0;
@@ -38,7 +38,7 @@ public sealed class NumericRegressionTests
     }
 
     [Test]
-    public async Task Concurrent_conditional_updates_converge_on_extremes()
+    public async ValueTask Concurrent_conditional_updates_converge_on_extremes()
     {
         var holder = new Holder();
         Parallel.For(0, 10000, i => holder.Value.SetIfGreater(i));
